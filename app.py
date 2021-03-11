@@ -118,5 +118,5 @@ def logout():
 	session.pop('username', None)
 	return redirect(url_for('home'))
 
-if __name__ == '__main__':
-	app.run(port = 7000, debug = True)
+# if __name__ == '__main__':
+# 	app.run(port = 7000, debug = True)
