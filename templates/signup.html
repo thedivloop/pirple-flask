@@ -1,0 +1,13 @@
+{% extends "structure.html" %}
+
+{% block main%}
+	<h1>This is for signing up here!</h1>
+	<form action="/signup" method="POST">
+		<input placeholder="Username" type="text" name="username">
+		<input placeholder="First name" type="text" name="firstname">
+		<input placeholder="Last name" type="text" name="lastname">
+		<input placeholder="Password"type="password" name="password">
+		<input type="submit" >
+	</form>
+	<p>{{ message }}</p>
+{% endblock main%}

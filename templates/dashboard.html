@@ -1,0 +1,33 @@
+{% extends "structure.html" %}
+
+{% block logout %}
+<a href="/logout">Sign out</a>
+{% endblock logout %}
+{% block main%}
+	<h1>Your lists<a href="{{ url_for('createlist') }}"><i class="material-icons Large">add</i></a></h1>
+	{% block content%}
+	<div class="main">
+		{% for l in message[0] %}
+		<div class="lists">
+			<p class="listnames" id="{{ l[0] }}">{{ l[1] }}<a href="{{ url_for('deletelist', lid=l[0]) }}"><i class="material-icons Small">delete</i></a></p>
+			<table>
+				
+				{% for t in message[1] %}
+					{% if t[0] == l[0] %}
+					<tr>
+						<td>{{t[2]}}</td>
+						<td><a href="{{ url_for('update_task', tid=t[1]) }}" ><i class="material-icons Small">edit</i></a></td>
+						<td><a href="{{ url_for('deletetask', tid=t[1]) }}"><i class="material-icons Small">delete</i></a></td>
+					</tr>
+					{% endif %}
+				{% endfor%}
+					<tr>
+						<td><a href="{{ url_for('createtask', lid=l[0]) }}"><i class="material-icons Small">add</i>Task</a></td>
+					</tr>
+			</table>
+		</div>
+		{% endfor %}
+	</div>
+	
+	{% endblock %}
+{% endblock main%}

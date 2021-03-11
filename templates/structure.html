@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">	
+	<link rel="stylesheet" href="/static/css/style.css">
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+	<title>This only shows up in the browser</title>
+</head>
+<body>
+
+	<h1>Best task list webapp</h1>
+	<nav>
+		<a href="http://localhost:7000">Home</a>
+		<a href="/about">Learn more about us</a>
+		<a href="/terms">Our terms</a>
+		<a href="/privacy">Our privacy policy</a>
+		{% block logout %}
+		{% endblock logout %}
+	</nav>
+	<div>
+		{% block main%}
+		<h1>
+			This only shows on structure.html
+		</h1>
+		{% endblock main%}
+	</div>
+</body>
+</html>

@@ -1,0 +1,13 @@
+{% extends "structure.html" %}
+{% block logout %}
+<a href="/logout">Sign out</a>
+{% endblock logout %}
+{% block main%}
+<br>
+<form method="post">
+    <label for="list">List</label>
+    <input name="list" id="list" value="{{ request.form['list'] }}" required>
+    <input type="submit" value="Save">
+  </form>
+
+{% endblock %}

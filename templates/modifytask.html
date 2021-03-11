@@ -1,0 +1,15 @@
+{% extends "structure.html" %}
+{% block logout %}
+<a href="/logout">Sign out</a>
+{% endblock logout %}
+{% block main%}
+<br>
+<form method="post" >
+    <label for="task">Task</label>
+    <p style="font-size : 12px;">Current text: <i>{{text}}</i></p>
+    <input name="task" id="task" value="{{ request.form['task'] }}" required>
+    <input type="submit" value="Save">
+  </form>
+  
+
+{% endblock %}
