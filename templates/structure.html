@@ -4,18 +4,25 @@
 	<meta charset="utf-8">	
 	<link rel="stylesheet" href="/static/css/style.css">
 	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-	<title>This only shows up in the browser</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+	<title>The best task list ever</title>
 </head>
 <body>
 
-	<h1>Best task list webapp</h1>
+	
+	<h1>The Divloop task list webapp</h1>
 	<nav>
-		<a href="/">Home</a>
-		<a href="/about">Learn more about us</a>
-		<a href="/terms">Our terms</a>
-		<a href="/privacy">Our privacy policy</a>
-		{% block logout %}
-		{% endblock logout %}
+		<div class="nav-wrapper pink lighten-2 ">
+			<ul>
+				<li><a href="/">Home</a></li>
+				<li><a href="/about">Learn more about us</a></li>
+				<li><a href="/terms">Our terms</a></li>
+				<li><a href="/privacy">Our privacy policy</a></li>
+				{% block logout %}
+				{% endblock logout %}
+			</ul>
+		</div>
 	</nav>
 	<div>
 		{% block main%}

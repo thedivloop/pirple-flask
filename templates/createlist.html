@@ -1,13 +1,19 @@
 {% extends "structure.html" %}
 {% block logout %}
-<a href="/logout">Sign out</a>
+<li><a href="/logout">Sign out</a></li>
 {% endblock logout %}
 {% block main%}
 <br>
-<form method="post">
-    <label for="list">List</label>
-    <input name="list" id="list" value="{{ request.form['list'] }}" required>
-    <input type="submit" value="Save">
+<div class="row">
+  <form class="col s12" method="post">
+    <div class="row">
+      <div class="input-field col s6">
+        <label class="active" for="list">List</label>
+        <input class="validate" name="list" id="list" value="{{ request.form['list'] }}" required>
+        <input type="submit" value="Save">
+      </div>
+    </div>
   </form>
+</div>
 
 {% endblock %}

@@ -1,6 +1,17 @@
 body {
-	background-image: url(../img/sunset.jpg);
+	background: #8360c3; /* fallback for old browsers */
+  	background: -webkit-linear-gradient(to right, #8360c3, #2ebf91); /* Chrome 10-25, Safari 5.1-6 */
+  	background: linear-gradient(to right, #8360c3, #2ebf91); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+	/* background-image: url(../img/sunset.jpg); */
 	/* background-color: white; */
+}
+
+.nav-wrapper {
+	/* background-color: #275697; */
+}
+
+h1 {
+	text-align: center;
 }
 
 .main {
@@ -11,16 +22,18 @@ body {
 .lists {
 	margin: 10px;
 	padding: 20px;
-	border: 1px solid #BFBFBF;
+	color: white;
+	/* border: 1px solid #BFBFBF; */
 	border-radius: 5px;
-	background-color: white;
-	box-shadow: 10px 10px 5px #aaaaaa;
+	background-color: #f06292;
+	box-shadow: 2px 2px 10px black;
 
 }
 .listnames {
 	text-align: center;
+	
 }
-h1 {
+h1,h2 {
 	color: #112275;
 }
 
@@ -38,4 +51,12 @@ p {
 tr {
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: 14px;
+}
+
+.icon-del {
+	color: red;
+}
+
+.icon {
+	color: #4db6ac;
 }

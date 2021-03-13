@@ -19,15 +19,24 @@ def home():
 
 @app.route('/terms', methods = ['GET'])
 def terms():
-	return render_template('terms.html')
+	status = "out"
+	if 'username' in session:
+		status = "in"
+	return render_template('terms.html', message = status)
 
 @app.route('/privacy', methods = ['GET'])
 def privacy():
-	return render_template('privacy.html')
+	status = "out"
+	if 'username' in session:
+		status = "in"
+	return render_template('privacy.html', message = status)
 
 @app.route('/about', methods = ['GET'])
 def about():
-	return render_template('about.html')
+	status = "out"
+	if 'username' in session:
+		status = "in"
+	return render_template('about.html', message = status)
 
 @app.route('/dashboard', methods = ['GET'])
 def dashboard():
@@ -63,7 +72,7 @@ def signup():
 		lastname = request.form["lastname"]
 		password = request.form["password"]
 		message = model.signup(username,firstname, lastname, password)
-		return render_template('signup.html', message = message)
+		return redirect(url_for('login'))
 
 @app.route('/getsession')
 def getsession():
@@ -78,7 +87,7 @@ def createlist():
 		g.user = session['username']
 		userID = model.getUserId(g.user)
 		model.add_list(userID,list)
-		return render_template('dashboard.html', message = model.get_lists(g.user))
+		return redirect(url_for('home'))
 	else:
 		return render_template('createlist.html')
 

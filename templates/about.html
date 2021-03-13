@@ -1,6 +1,11 @@
 {% extends "structure.html" %}
-{% block logout %}
-<a href="/logout">Sign out</a>
+{% block logout %} 
+	{% if message == "in" %}
+		<li><a href="/logout">Sign out</a></li>
+	{% else %}
+		<li><a href="/login">Log in</a></li>
+		<li><a href="/signup">Sign in</a></li>
+	{% endif %}
 {% endblock logout %}
 {% block main%}
 	<br>
