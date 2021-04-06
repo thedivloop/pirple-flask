@@ -57,6 +57,9 @@ def login():
         pwd = model.check_pw(areyouuser)
         if request.form['password'] == pwd:
             session['username'] = request.form['username']
+            model.setLog(model.getUserId(session['username']))
+            #countLogs = model.getLogs()
+            # print(countLogs)
             return redirect(url_for('home'))
     return render_template('index.html')
 
@@ -71,7 +74,7 @@ def before_request():
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
     if request.method == 'GET':
-        message = 'Please sign up!'
+        # message = 'Please sign up!'
         return render_template('signup.html')
     else:
         username = request.form["username"]
@@ -158,7 +161,12 @@ def admin_login():
 @app.route('/admin-dashboard', methods=['GET', 'POST'])
 def admin_dash():
     if 'admin' in session:
-        return render_template('admin-dashboard.html', message='')
+        countLogs = model.getLogs()
+        countLogs24h = model.getLastLogs()
+        countLists = model.getLists()
+        countLists24h = model.getLastLists()
+        print(countLogs)
+        return render_template('admin-dashboard.html', countLogs=countLogs, countLogs24h=countLogs24h, countLists=countLists, countLists24h=countLists24h)
     return redirect(url_for('admin_login'))
 
 

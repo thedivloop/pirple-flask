@@ -1,5 +1,6 @@
 import sqlite3
 import click
+import datetime
 from flask import current_app, g
 from flask.cli import with_appcontext
 
@@ -266,8 +267,60 @@ def setLog(userId):
     connection = sqlite3.connect('project.db', check_same_thread=False)
     cursor = connection.cursor()
     cursor.execute(
-        """ INSERT INTO logs(userId) VALUES ('{userId}')""".format(userId=userId))
+        """ INSERT INTO logs(userId) VALUES ('{userId}');""".format(userId=userId))
+    connection.commit()
 
+    cursor.close()
+    connection.close()
+
+
+def getLogs():
+    print("getLogs is running")
+    connection = sqlite3.connect('project.db', check_same_thread=False)
+    cursor = connection.cursor()
+    cursor.execute(
+        "SELECT COUNT(*) FROM logs")
+    (countLogs,) = cursor.fetchone()
     connection.commit()
     cursor.close()
     connection.close()
+    return countLogs
+
+
+def getLists():
+    print("getLists is running")
+    connection = sqlite3.connect('project.db', check_same_thread=False)
+    cursor = connection.cursor()
+    cursor.execute(
+        "SELECT COUNT(*) FROM lists")
+    (countLists,) = cursor.fetchone()
+    connection.commit()
+    cursor.close()
+    connection.close()
+    return countLists
+
+
+def getLastLogs():
+    print("getLastLogs is running")
+    connection = sqlite3.connect('project.db', check_same_thread=False)
+    cursor = connection.cursor()
+    cursor.execute(
+        "select count(*) from logs where log >= datetime('now','-1 hour');")
+    (countLogs,) = cursor.fetchone()
+    connection.commit()
+    cursor.close()
+    connection.close()
+    return countLogs
+
+
+def getLastLists():
+    print("getLastLists is running")
+    connection = sqlite3.connect('project.db', check_same_thread=False)
+    cursor = connection.cursor()
+    cursor.execute(
+        "select count(*) from lists where timestamp >= datetime('now','-1 hour');")
+    (countLists,) = cursor.fetchone()
+    connection.commit()
+    cursor.close()
+    connection.close()
+    return countLists
