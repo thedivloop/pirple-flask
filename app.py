@@ -58,7 +58,7 @@ def login():
         if request.form['password'] == pwd:
             session['username'] = request.form['username']
             model.setLog(model.getUserId(session['username']))
-            #countLogs = model.getLogs()
+            # countLogs = model.getLogs()
             # print(countLogs)
             return redirect(url_for('home'))
     return render_template('index.html')
@@ -161,16 +161,28 @@ def admin_login():
 @app.route('/admin-dashboard', methods=['GET', 'POST'])
 def admin_dash():
     if 'admin' in session:
-        countLogs = model.getLogs()
-        countLogs24h = model.getLastLogs()
-        countLists = model.getLists()
-        countLists24h = model.getLastLists()
+        countLogs = model.getLogsCount()
+        countLogs24h = model.getLastLogsCount()
+        countLists = model.getListsCount()
+        countLists24h = model.getLastListsCount()
         print(countLogs)
         return render_template('admin-dashboard.html', countLogs=countLogs, countLogs24h=countLogs24h, countLists=countLists, countLists24h=countLists24h)
     return redirect(url_for('admin_login'))
 
 
-@app.route('/admin-logout')
+@app.route('/admin/users', methods=['GET', 'POST'])
+def admin_users():
+    if 'admin' in session:
+        logs = model.getLogsTable()
+        finalLogs = []
+        for i in range(len(logs)):
+            finalLogs.append(
+                [model.get_username(logs[i][0]), logs[i][1], logs[i][0]])
+        return render_template('admin-userslist.html', logs=finalLogs)
+    return redirect(url_for('admin_login'))
+
+
+@ app.route('/admin-logout')
 def logout_admin():
     session.pop('admin', None)
     return redirect(url_for('admin_login'))

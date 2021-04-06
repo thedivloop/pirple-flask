@@ -249,6 +249,34 @@ def check_users():
     return users
 
 
+def get_users():
+    connection = sqlite3.connect('project.db', check_same_thread=False)
+    cursor = connection.cursor()
+    cursor.execute(
+        """ SELECT username,userID FROM users ORDER BY userID DESC; """)
+    db_users = cursor.fetchall()
+
+    connection.commit()
+    cursor.close()
+    connection.close()
+    print(db_users)
+    return db_users
+
+
+def get_username(userId):
+    connection = sqlite3.connect('project.db', check_same_thread=False)
+    cursor = connection.cursor()
+    cursor.execute(
+        """ SELECT username FROM users WHERE userID='{userId}'; """.format(userId=userId))
+    username = cursor.fetchone()[0]
+
+    connection.commit()
+    cursor.close()
+    connection.close()
+    print(username)
+    return username
+
+
 def getUserId(username):
     connection = sqlite3.connect('project.db', check_same_thread=False)
     cursor = connection.cursor()
@@ -274,7 +302,7 @@ def setLog(userId):
     connection.close()
 
 
-def getLogs():
+def getLogsCount():
     print("getLogs is running")
     connection = sqlite3.connect('project.db', check_same_thread=False)
     cursor = connection.cursor()
@@ -287,7 +315,7 @@ def getLogs():
     return countLogs
 
 
-def getLists():
+def getListsCount():
     print("getLists is running")
     connection = sqlite3.connect('project.db', check_same_thread=False)
     cursor = connection.cursor()
@@ -300,7 +328,7 @@ def getLists():
     return countLists
 
 
-def getLastLogs():
+def getLastLogsCount():
     print("getLastLogs is running")
     connection = sqlite3.connect('project.db', check_same_thread=False)
     cursor = connection.cursor()
@@ -313,7 +341,7 @@ def getLastLogs():
     return countLogs
 
 
-def getLastLists():
+def getLastListsCount():
     print("getLastLists is running")
     connection = sqlite3.connect('project.db', check_same_thread=False)
     cursor = connection.cursor()
@@ -324,3 +352,16 @@ def getLastLists():
     cursor.close()
     connection.close()
     return countLists
+
+
+def getLogsTable():
+    print("getLogsTable is running")
+    connection = sqlite3.connect('project.db', check_same_thread=False)
+    cursor = connection.cursor()
+    cursor.execute(
+        "SELECT * FROM logs")
+    logsTable = cursor.fetchall()
+    connection.commit()
+    cursor.close()
+    connection.close()
+    return logsTable
