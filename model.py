@@ -78,7 +78,6 @@ def get_tasktext(tid):
 def add_list(userID, listname):
     connection = sqlite3.connect('project.db', check_same_thread=False)
     cursor = connection.cursor()
-    numberoftasks = 0
     cursor.execute(""" INSERT INTO lists(userID, listname, numberoftasks) VALUES ('{userID}', '{listname}', '{numberoftasks}')""".format(
         userID=userID, listname=listname, numberoftasks=0))
 
@@ -94,7 +93,6 @@ def add_list(userID, listname):
 def add_task(listID, taskname):
     connection = sqlite3.connect('project.db', check_same_thread=False)
     cursor = connection.cursor()
-    numberoftasks = 0
     cursor.execute(""" INSERT INTO tasks(listID, taskname) VALUES ('{listID}', '{taskname}')""".format(
         listID=listID, taskname=taskname))
 
@@ -133,7 +131,6 @@ def update_task(taskID, newtaskname):
 def delete_task(taskID):
     connection = sqlite3.connect('project.db', check_same_thread=False)
     cursor = connection.cursor()
-    numberoftasks = 0
 
     cursor.execute(
         """ SELECT listID FROM tasks WHERE taskID = '{taskID}' ORDER BY listID DESC; """.format(taskID=taskID))
@@ -176,7 +173,6 @@ def update_list(listID, newlistname):
 def delete_list(list):
     connection = sqlite3.connect('project.db', check_same_thread=False)
     cursor = connection.cursor()
-    numberoftasks = 0
     cursor.execute(
         """ DELETE FROM lists WHERE listID = '{list}'""".format(list=list))
 
@@ -269,7 +265,6 @@ def getUserId(username):
 def setLog(userId):
     connection = sqlite3.connect('project.db', check_same_thread=False)
     cursor = connection.cursor()
-    numberoftasks = 0
     cursor.execute(
         """ INSERT INTO logs(userId) VALUES ('{userId}')""".format(userId=userId))
 
