@@ -406,9 +406,3 @@ def delete_user(uid):
     connection.close()
 
     return print("User ID", uid, "successfully deleted")
-    """ get lists
-    delete all tasks
-    delete all lists
-    delete all logs
-    delete user
-    """

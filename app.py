@@ -83,7 +83,7 @@ def signup():
         firstname = request.form["firstname"]
         lastname = request.form["lastname"]
         password = request.form["password"]
-        message = model.signup(username, firstname, lastname, password)
+        model.signup(username, firstname, lastname, password)
         return redirect(url_for('login'))
 
 
@@ -132,11 +132,11 @@ def update_task(tid):
     if request.method == 'POST':
         task = request.form['task']
         g.user = session['username']
-        userID = model.getUserId(g.user)
+        #userID = model.getUserId(g.user)
         model.update_task(tid, task)
         return redirect(url_for('home'))
     else:
-        tasktext = 'this is the text'
+        #tasktext = 'this is the text'
         print(model.get_tasktext(tid))
         return render_template('modifytask.html', text=model.get_tasktext(tid))
 
@@ -214,11 +214,11 @@ def delete_profile(uid):
     return redirect(url_for('admin_login'))
 
 
-@ app.route('/admin-logout')
+@app.route('/admin-logout')
 def logout_admin():
     session.pop('admin', None)
     return redirect(url_for('admin_login'))
 
 
 if __name__ == '__main__':
-    app.run(port=7000, debug=True)
+    app.run(port=7000, debug=False)
