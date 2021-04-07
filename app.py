@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, session, redirect, url_for, g
+from werkzeug.exceptions import HTTPException
 import model
 import math
 import numpy as np
@@ -220,5 +221,15 @@ def logout_admin():
     return redirect(url_for('admin_login'))
 
 
+# @app.errorhandler(Exception)
+# def handle_exception(e):
+#     # pass through HTTP errors
+#     if isinstance(e, HTTPException):
+#         return e
+
+#     # now you're handling non-HTTP exceptions only
+#     return render_template("500_generic.html", e=e), 500
+
+
 if __name__ == '__main__':
-    app.run(port=7000, debug=False)
+    app.run(port=7000, debug=True)
