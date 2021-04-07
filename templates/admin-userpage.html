@@ -1,54 +1,31 @@
 {% extends "admin-structure.html" %}
 {% block main%}
 	
-	<h3>Users connections</h3>
+	<h3>User details</h3>
+    <a href="{{ url_for('admin_users', page=1) }}">Back to list of connections</a>
 	<div  class="container">
 		<hr>
 		<table class="table table-dark">
 			<thead>
 			  <tr>
 				<th class="text-center" scope="col">Username</th>
-				<th class="text-center" scope="col">Connection time</th>
+				<th class="text-center" scope="col">First Name</th>
+                <th class="text-center" scope="col">Last Name</th>
+                <th class="text-center" scope="col">Number of lists</th>
+                <th class="text-center" scope="col">Number of tasks</th>
 			  </tr>
 			</thead>
 			<tbody>
-            {% for row in logs%}
 			  <tr  class="table-secondary">
-				<td class="text-center"><a href="{{ url_for('get_user_details', uid=row[2]) }}" >{{row[0]}}</a></td>
-				<td class="text-center">{{row[1]}}</td>
+				<td class="text-center">{{userdetails[0]}}</td>
+				<td class="text-center">{{userdetails[1]}}</td>
+                <td class="text-center">{{userdetails[2]}}</td>
+                <td class="text-center">{{userdetails[4]}}</td>
+                <td class="text-center">{{userdetails[5]}}</td>
 			  </tr>
-            {% endfor %}
 			</tbody>
 		</table>
-        <nav aria-label="...">
-            <ul class="pagination justify-content-center">
-                {% if page == 1%}
-                <li class="page-item disabled">
-                  {% else %}
-                  <li class="page-item">
-                  {% endif %}
-                  <a class="page-link " href="{{ url_for('admin_users', page=page-1) }}">Previous</a>
-                </li>
-              {% for pagenumber in range(0,totalPages)%}
-                {% if pagenumber+1 != page%}
-                    <!-- <li class="page-item"><a class="page-link" href="/admin/users?page={{pagenumber}}">{{pagenumber}}</a></li> -->
-                    <li class="page-item"><a class="page-link" href="{{ url_for('admin_users', page=pagenumber+1) }}">{{pagenumber+1}}</a></li>
-                {% else %}
-                    <li class="page-item active" aria-current="page">
-                        <span class="page-link">{{pagenumber+1}}</span>
-                    </li>
-                {% endif %}
-              {% endfor %}
-              {% if page == totalPages%}
-              <li class="page-item disabled">
-                {% else %}
-                <li class="page-item">
-                {% endif %}
-                <a class="page-link " href="{{ url_for('admin_users', page=page+1) }}">Next</a>
-              </li>
-            </ul>
-          </nav>
-
+        <a href="{{ url_for('delete_profile', uid=userdetails[3]) }}" class="btn btn-danger">Delete</a>
 	</div>
 <!-- 1. If someone visits the /admin page, they should view an HTML login form (just for Admins, completely separate from the user's login form). The admin you created should be the only user allowed to login there. Any other user credentials should fail.
 

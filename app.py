@@ -1,5 +1,7 @@
 from flask import Flask, render_template, request, session, redirect, url_for, g
 import model
+import math
+import numpy as np
 
 
 app = Flask(__name__)
@@ -173,12 +175,42 @@ def admin_dash():
 @app.route('/admin/users', methods=['GET', 'POST'])
 def admin_users():
     if 'admin' in session:
-        logs = model.getLogsTable()
+        page = request.args.get('page', 1, type=int)
+        # print("page is: ",page)
+        entriesPerPage = 50
+        allLogs = np.array(model.getLogsTable())
+        totalPages = math.ceil(len(allLogs)/entriesPerPage)
+        print("these are all logs")
+        print(totalPages)
+        # paginatedLogs = allLogs[entriesPerPage*(page-1), entriesPerPage*page-1]
+        paginatedLogs = allLogs[entriesPerPage*(page-1): entriesPerPage*page]
         finalLogs = []
-        for i in range(len(logs)):
+        for i in range(len(paginatedLogs)):
             finalLogs.append(
-                [model.get_username(logs[i][0]), logs[i][1], logs[i][0]])
-        return render_template('admin-userslist.html', logs=finalLogs)
+                [model.get_username(paginatedLogs[i][0]), paginatedLogs[i][1], paginatedLogs[i][0]])
+        return render_template('admin-userslist.html', logs=finalLogs, page=page, totalPages=totalPages)
+    return redirect(url_for('admin_login'))
+
+
+@app.route('/admin/users/<int:uid>', methods=['GET', 'POST'])
+def get_user_details(uid):
+    if 'admin' in session:
+        userstuff = model.getUserDetails(uid)
+        userdetails = []
+        for e in userstuff:
+            userdetails.append(e)
+        print("this is the lists", model.get_lists(userdetails[0]))
+        userdetails.append(len(model.get_lists(userdetails[0])[0]))
+        userdetails.append(len(model.get_lists(userdetails[0])[1]))
+        return render_template('admin-userpage.html', userdetails=userdetails)
+    return redirect(url_for('admin_login'))
+
+
+@app.route('/admin/users/<int:uid>/delete', methods=['GET', 'POST'])
+def delete_profile(uid):
+    if 'admin' in session:
+        model.delete_user(uid)
+        return redirect(url_for('admin_users'))
     return redirect(url_for('admin_login'))
 
 

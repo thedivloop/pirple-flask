@@ -13,11 +13,11 @@ def get_lists(username):
     cursor.execute(""" SELECT userID FROM users WHERE username = '{username}' ;""".format(
         username=username))
     userIdent = cursor.fetchone()[0]
-    print(userIdent)
+    # print(userIdent)
     cursor.execute(""" SELECT listID, listname FROM lists WHERE userID = '{userID}'; """.format(
         userID=userIdent))
     db_lists = cursor.fetchall()
-    print(db_lists)
+    # print(db_lists)
     lists = []
     tasks = []
 
@@ -31,7 +31,7 @@ def get_lists(username):
         db_tasks = cursor.fetchall()
         for t in db_tasks:
             tasks.append(t)
-        print(db_tasks)
+        # print(db_tasks)
 
     connection.commit()
     cursor.close()
@@ -273,7 +273,7 @@ def get_username(userId):
     connection.commit()
     cursor.close()
     connection.close()
-    print(username)
+    # print(username)
     return username
 
 
@@ -289,6 +289,20 @@ def getUserId(username):
     connection.close()
 
     return db_users[0][0]
+
+
+def getUserDetails(userId):
+    connection = sqlite3.connect('project.db', check_same_thread=False)
+    cursor = connection.cursor()
+    cursor.execute(
+        """ SELECT username, firstname, lastname, userID FROM users WHERE userID='{userId}'; """.format(userId=userId))
+    userDetails = cursor.fetchone()
+
+    connection.commit()
+    cursor.close()
+    connection.close()
+    print(userDetails)
+    return userDetails
 
 
 def setLog(userId):
@@ -333,7 +347,7 @@ def getLastLogsCount():
     connection = sqlite3.connect('project.db', check_same_thread=False)
     cursor = connection.cursor()
     cursor.execute(
-        "select count(*) from logs where log >= datetime('now','-1 hour');")
+        "select count(*) from logs where log >= datetime('now','-24 hour');")
     (countLogs,) = cursor.fetchone()
     connection.commit()
     cursor.close()
@@ -346,7 +360,7 @@ def getLastListsCount():
     connection = sqlite3.connect('project.db', check_same_thread=False)
     cursor = connection.cursor()
     cursor.execute(
-        "select count(*) from lists where timestamp >= datetime('now','-1 hour');")
+        "select count(*) from lists where timestamp >= datetime('now','-24 hour');")
     (countLists,) = cursor.fetchone()
     connection.commit()
     cursor.close()
@@ -359,9 +373,42 @@ def getLogsTable():
     connection = sqlite3.connect('project.db', check_same_thread=False)
     cursor = connection.cursor()
     cursor.execute(
-        "SELECT * FROM logs")
+        "SELECT * FROM logs ORDER BY log DESC")
     logsTable = cursor.fetchall()
     connection.commit()
     cursor.close()
     connection.close()
     return logsTable
+
+
+def delete_user(uid):
+    print("Deleting user", uid)
+    username = get_username(uid)
+    lists, tasks = get_lists(username)
+    print(username)
+    print(lists)
+    print(tasks)
+    for task in tasks:
+        delete_task(task[1])
+    for list in lists:
+        delete_list(list[0])
+
+    connection = sqlite3.connect('project.db', check_same_thread=False)
+    cursor = connection.cursor()
+
+    cursor.execute(
+        """ DELETE FROM users WHERE userID = '{uid}'""".format(uid=uid))
+    cursor.execute(
+        """ DELETE FROM logs WHERE userid = '{uid}'""".format(uid=uid))
+
+    connection.commit()
+    cursor.close()
+    connection.close()
+
+    return print("User ID", uid, "successfully deleted")
+    """ get lists
+    delete all tasks
+    delete all lists
+    delete all logs
+    delete user
+    """
