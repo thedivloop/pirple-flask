@@ -1,4 +1,4 @@
-New features
+New features and live on https://www.thedivloop.com
 1. New profile settings page, with option to delete the account. Added email to the profile settings.
 2. Added Deadline to the tasks.
 3. Added completion status (%)

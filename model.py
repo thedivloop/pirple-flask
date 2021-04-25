@@ -408,7 +408,7 @@ def getLogsTable():
 def delete_user(uid):
     print("Deleting user", uid)
     username = get_username(uid)
-    lists, tasks = get_lists(username)
+    lists, tasks, unused = get_lists(username)
     print(username)
     print(lists)
     print(tasks)

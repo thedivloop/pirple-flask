@@ -227,8 +227,10 @@ def logout_admin():
 
 @app.route('/deleteOwnProfile', methods=['GET', 'POST'])
 def deleteOwnProfile():
-    model.delete_user(model.getUserId(session['username']))
-    return redirect(url_for('logout'))
+    uid = model.getUserId(session['username'])
+    session.pop('username', None)
+    model.delete_user(uid)
+    return redirect(url_for('home'))
 
 
 @app.route('/settings', methods=['GET', 'POST'])
