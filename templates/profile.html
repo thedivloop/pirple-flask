@@ -1,0 +1,20 @@
+{% extends "structure.html" %}
+{% block logout %}
+<li style="background-color: red;"><a href="/logout">Sign out</a></li>
+{% endblock logout %}
+{% block main%}
+	<h2>This is to modify</h2>
+	<form action="/settings" method="POST">
+		<input placeholder="Username: {{userDetails[0]}}" type="text" name="username" disabled>
+		<input placeholder="First name: {{userDetails[1]}}" type="text" name="firstname" value="{{userDetails[1]}}" required>
+		<input placeholder="Last name : {{userDetails[2]}}" type="text" name="lastname" value="{{userDetails[2]}}" required>
+        <input placeholder="Email: {{userDetails[4]}}" type="email" name="email" value="{{userDetails[4]}}" required>
+		<input placeholder="Password"type="password" name="password" required>
+		<input type="submit" >
+	</form>
+    <br>
+    <a href="{{ url_for('deleteOwnProfile') }}" class="waves-effect waves-light btn" style="background-color: red !important;">Delete permanently your profile</a>
+    
+    <p>{{ message }}</p>
+	
+{% endblock main%}

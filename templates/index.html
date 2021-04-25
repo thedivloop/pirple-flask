@@ -1,5 +1,7 @@
 {% extends "structure.html" %}
-
+{% block logout %} 
+	<li><a href="/signup">Sign in</a></li>
+{% endblock logout %}
 {% block main%}
 	<br>
 	<form action="/login" method="POST">

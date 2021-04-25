@@ -1,6 +1,6 @@
 import sqlite3
 import click
-import datetime
+from datetime import datetime
 from flask import current_app, g
 from flask.cli import with_appcontext
 
@@ -17,7 +17,7 @@ def get_lists(username):
     cursor.execute(""" SELECT listID, listname FROM lists WHERE userID = '{userID}'; """.format(
         userID=userIdent))
     db_lists = cursor.fetchall()
-    # print(db_lists)
+    print(db_lists)
     lists = []
     tasks = []
 
@@ -27,17 +27,29 @@ def get_lists(username):
 
     for l in lists:
         cursor.execute(
-            """ SELECT listID, taskID,taskname FROM tasks WHERE listID = '{listID}'; """.format(listID=l))
+            """ SELECT listID, taskID,taskname,deadline,completion,status FROM tasks WHERE listID = '{listID}'; """.format(listID=l))
         db_tasks = cursor.fetchall()
         for t in db_tasks:
             tasks.append(t)
-        # print(db_tasks)
+        print(db_tasks)
 
     connection.commit()
     cursor.close()
     connection.close()
+    overdue = []
+    for i in range(len(tasks)):
+        if tasks[i][3] != None:
+            now = datetime.now()
+            date_object = datetime.strptime(tasks[i][3], "%Y-%m-%d %H:%M:%S")
+            print("date_object =", date_object)
+            if now > date_object:
+                print("overdue")
+                print(now)
+                overdue.append(1)
+            else:
+                overdue.append(0)
 
-    return db_lists, tasks
+    return db_lists, tasks, overdue
 
 
 # get the list of the tasks for a specified listID
@@ -64,8 +76,8 @@ def get_tasktext(tid):
     connection = sqlite3.connect('project.db', check_same_thread=False)
     cursor = connection.cursor()
     cursor.execute(
-        """ SELECT taskname FROM tasks WHERE taskID = '{tid}';""".format(tid=tid))
-    tasktext = cursor.fetchone()[0]
+        """ SELECT taskname,deadline,completion,status FROM tasks WHERE taskID = '{tid}';""".format(tid=tid))
+    tasktext = cursor.fetchone()
 
     connection.commit()
     cursor.close()
@@ -94,7 +106,7 @@ def add_list(userID, listname):
 def add_task(listID, taskname):
     connection = sqlite3.connect('project.db', check_same_thread=False)
     cursor = connection.cursor()
-    cursor.execute(""" INSERT INTO tasks(listID, taskname) VALUES ('{listID}', '{taskname}')""".format(
+    cursor.execute(""" INSERT INTO tasks(listID, taskname, completion) VALUES ('{listID}', '{taskname}',0)""".format(
         listID=listID, taskname=taskname))
 
     cursor.execute(
@@ -114,11 +126,11 @@ def add_task(listID, taskname):
 # modify a task
 
 
-def update_task(taskID, newtaskname):
+def update_task(taskID, newtaskname, newdeadline, newcompletion, newstatus):
     connection = sqlite3.connect('project.db', check_same_thread=False)
     cursor = connection.cursor()
-    cursor.execute(""" UPDATE tasks SET taskname = '{newtaskname}' WHERE taskID = '{taskID}'""".format(
-        newtaskname=newtaskname, taskID=taskID))
+    cursor.execute(""" UPDATE tasks SET taskname = '{newtaskname}', deadline='{newdeadline}',completion='{newcompletion}',status='{newstatus}' WHERE taskID = '{taskID}'""".format(
+        newtaskname=newtaskname, taskID=taskID, newdeadline=newdeadline, newcompletion=newcompletion, newstatus=newstatus))
 
     connection.commit()
     cursor.close()
@@ -212,7 +224,7 @@ def check_pw_admin(username):
     return password
 
 
-def signup(username, firstname, lastname, password):
+def signup(username, firstname, lastname, password, email):
     connection = sqlite3.connect('project.db', check_same_thread=False)
     cursor = connection.cursor()
     cursor.execute(""" SELECT password FROM users WHERE username = '{username}' ORDER BY userID DESC; """.format(
@@ -220,8 +232,8 @@ def signup(username, firstname, lastname, password):
     exist = cursor.fetchone()
 
     if exist is None:
-        cursor.execute(""" INSERT INTO users(username, firstname, lastname, password)VALUES('{username}', '{firstname}', '{lastname}','{password}')""".format(
-            username=username, firstname=firstname, lastname=lastname, password=password))
+        cursor.execute(""" INSERT INTO users(username, firstname, lastname, password, email)VALUES('{username}', '{firstname}', '{lastname}','{password}','{email}')""".format(
+            username=username, firstname=firstname, lastname=lastname, password=password, email=email))
         connection.commit()
         cursor.close()
         connection.close()
@@ -229,6 +241,18 @@ def signup(username, firstname, lastname, password):
         return('User already existed!!')
 
     return 'You have successfully signed up!'
+
+
+def updateSettings(username, firstname, lastname, password, email):
+
+    connection = sqlite3.connect('project.db', check_same_thread=False)
+    cursor = connection.cursor()
+    cursor.execute("""UPDATE users SET firstname='{firstname}',lastname='{lastname}',email='{email}',password='{password}' WHERE username = '{username}'""".format(
+        username=username, firstname=firstname, lastname=lastname, password=password, email=email))
+    connection.commit()
+    cursor.close()
+    connection.close()
+    return 'Settings successfully updated'
 
 
 def check_users():
@@ -253,7 +277,7 @@ def get_users():
     connection = sqlite3.connect('project.db', check_same_thread=False)
     cursor = connection.cursor()
     cursor.execute(
-        """ SELECT username,userID FROM users ORDER BY userID DESC; """)
+        """ SELECT username,userID,firstname,lastname,password,email FROM users ORDER BY userID DESC; """)
     db_users = cursor.fetchall()
 
     connection.commit()
@@ -295,7 +319,7 @@ def getUserDetails(userId):
     connection = sqlite3.connect('project.db', check_same_thread=False)
     cursor = connection.cursor()
     cursor.execute(
-        """ SELECT username, firstname, lastname, userID FROM users WHERE userID='{userId}'; """.format(userId=userId))
+        """ SELECT username, firstname, lastname, userID,email,password FROM users WHERE userID='{userId}'; """.format(userId=userId))
     userDetails = cursor.fetchone()
 
     connection.commit()

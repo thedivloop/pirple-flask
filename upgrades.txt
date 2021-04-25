@@ -1,0 +1,8 @@
+New features
+1. New profile settings page, with option to delete the account. Added email to the profile settings.
+2. Added Deadline to the tasks.
+3. Added completion status (%)
+4. Added Status (free text)
+5. When a task is completed at 100% the background color switches to teal.
+6. When a task is overdue and not completed at 100% the date color turns into red.
+7. Updated the colors of Login and Sign out to respectively green and red.

@@ -83,8 +83,9 @@ def signup():
         username = request.form["username"]
         firstname = request.form["firstname"]
         lastname = request.form["lastname"]
+        email = request.form["email"]
         password = request.form["password"]
-        model.signup(username, firstname, lastname, password)
+        model.signup(username, firstname, lastname, password, email)
         return redirect(url_for('login'))
 
 
@@ -132,9 +133,12 @@ def createtask(lid):
 def update_task(tid):
     if request.method == 'POST':
         task = request.form['task']
+        deadline = request.form['deadline']
+        completion = request.form['completion']
+        status = request.form['status']
         g.user = session['username']
         #userID = model.getUserId(g.user)
-        model.update_task(tid, task)
+        model.update_task(tid, task, deadline, completion, status)
         return redirect(url_for('home'))
     else:
         #tasktext = 'this is the text'
@@ -220,6 +224,42 @@ def logout_admin():
     session.pop('admin', None)
     return redirect(url_for('admin_login'))
 
+
+@app.route('/deleteOwnProfile', methods=['GET', 'POST'])
+def deleteOwnProfile():
+    model.delete_user(model.getUserId(session['username']))
+    return redirect(url_for('logout'))
+
+
+@app.route('/settings', methods=['GET', 'POST'])
+def settings():
+    if request.method == 'GET':
+        status = "out"
+        if 'username' in session:
+            status = "in"
+            userDetails = model.getUserDetails(
+                model.getUserId(session['username']))
+            # print(userDetails)
+        return render_template('profile.html', userDetails=userDetails)
+    else:
+        username = session['username']
+        firstname = request.form["firstname"]
+        lastname = request.form["lastname"]
+        email = request.form["email"]
+        password = request.form["password"]
+        print(password)
+        DBpassword = model.getUserDetails(
+            model.getUserId(session['username']))[5]
+        print(DBpassword)
+        if password != DBpassword:
+            userDetails = model.getUserDetails(
+                model.getUserId(session['username']))
+            return render_template('profile.html', message="Password is wrong!", userDetails=userDetails)
+        status = model.updateSettings(username,
+                                      firstname, lastname, password, email)
+        userDetails = model.getUserDetails(
+            model.getUserId(session['username']))
+        return render_template('profile.html', message=status, userDetails=userDetails)
 
 # @app.errorhandler(Exception)
 # def handle_exception(e):

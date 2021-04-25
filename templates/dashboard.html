@@ -1,7 +1,8 @@
 {% extends "structure.html" %}
 
 {% block logout %}
-<li><a href="/logout">Sign out</a></li>
+<li style="background-color: red;"><a href="/logout">Sign out</a></li>
+<li><a href="/settings">Settings</a></li>
 {% endblock logout %}
 {% block main%}
 	<h2>Your lists  <a href="{{ url_for('createlist') }}" class="waves-effect waves-light btn-small"><i class="material-icons right Large">add</i>Add</a></h2>
@@ -11,11 +12,31 @@
 		<div class="lists">
 			<p class="listnames" id="{{ l[0] }}">{{ l[1] }}   <a href="{{ url_for('deletelist', lid=l[0]) }}"><i class="material-icons Large icon-del">delete</i></a></p>
 			<table>
-				
+				<tr>
+					<th>Task name</th>
+					<th>Deadline</th>
+					<th>Completion</th>
+					<th>Status</th>
+				</tr>
 				{% for t in message[1] %}
 					{% if t[0] == l[0] %}
-					<tr>
+					{% if t[4] == 100 %}
+					<tr style="background-color:teal;">
+					{% else %}
+					<tr style="background-color:white;"></tr>
+					{% endif %}
+						
 						<td>{{t[2]}}</td>
+						{% if message[2][loop.index0] == true %}
+						{%  if t[4] != 100 %}
+						<td style="color:red;">{{t[3]}}</td>
+						{% else %}
+						<td>{{t[3]}}</td>
+						{% endif %}
+						{% else %}
+						<td>{{t[3]}}</td>
+						{% endif %}
+						<td>{{t[4]}}%</td><td>{{t[5]}}</td>
 						<td><a href="{{ url_for('update_task', tid=t[1]) }}" ><i class="material-icons Small icon">edit</i></a></td>
 						<td><a href="{{ url_for('deletetask', tid=t[1]) }}"><i class="material-icons Small icon-del">delete</i></a></td>
 					</tr>

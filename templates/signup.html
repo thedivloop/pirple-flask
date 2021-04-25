@@ -1,11 +1,14 @@
 {% extends "structure.html" %}
-
+{% block logout %} 
+	<li style="background-color: green;"><a href="/login">Log in</a></li>
+{% endblock logout %}
 {% block main%}
 	<h2>This is for signing up here!</h2>
 	<form action="/signup" method="POST">
 		<input placeholder="Username" type="text" name="username">
 		<input placeholder="First name" type="text" name="firstname">
 		<input placeholder="Last name" type="text" name="lastname">
+		<input placeholder="Email" type="email" name="email">
 		<input placeholder="Password"type="password" name="password">
 		<input type="submit" >
 	</form>
